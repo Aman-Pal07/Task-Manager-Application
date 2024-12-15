@@ -1,7 +1,6 @@
 "use client";
 import { useUserContext } from "@/context/userContext";
-import { Eye, EyeClosed } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 interface Props {
@@ -10,7 +9,7 @@ interface Props {
   };
 }
 
-const page = ({ params: { resetToken } }: Props) => {
+function page({ params: { resetToken } }: Props) {
   const { resetPassword } = useUserContext();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -20,12 +19,16 @@ const page = ({ params: { resetToken } }: Props) => {
   const handlePasswordChange = (e: any) => {
     setPassword(e.target.value);
   };
+
   const handleConfirmPasswordChange = (e: any) => {
     setConfirmPassword(e.target.value);
   };
+
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
+
+  // handle submit
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
@@ -33,6 +36,7 @@ const page = ({ params: { resetToken } }: Props) => {
       toast.error("Passwords do not match!");
       return;
     }
+
     resetPassword(resetToken, password);
   };
 
@@ -58,13 +62,16 @@ const page = ({ params: { resetToken } }: Props) => {
             />
             <button
               className="absolute p-1 right-4 top-[43%] text-[22px] text-[#999] opacity-45"
-              type="button"
               onClick={togglePassword}
+              type="button"
             >
-              {showPassword ? <Eye /> : <EyeClosed />}
+              {showPassword ? (
+                <i className="fas fa-eye-slash"></i>
+              ) : (
+                <i className="fas fa-eye"></i>
+              )}
             </button>
           </div>
-
           <div className="relative mt-[1rem] flex flex-col">
             <label htmlFor="email" className="mb-1 text-[#999]">
               Confirm Password
@@ -80,13 +87,16 @@ const page = ({ params: { resetToken } }: Props) => {
             />
             <button
               className="absolute p-1 right-4 top-[43%] text-[22px] text-[#999] opacity-45"
-              type="button"
               onClick={togglePassword}
+              type="button"
             >
-              {showPassword ? <Eye /> : <EyeClosed />}
+              {showPassword ? (
+                <i className="fas fa-eye-slash"></i>
+              ) : (
+                <i className="fas fa-eye"></i>
+              )}
             </button>
           </div>
-
           <div className="flex">
             <button
               type="submit"
@@ -97,9 +107,10 @@ const page = ({ params: { resetToken } }: Props) => {
             </button>
           </div>
         </div>
+        <img src="/flurry.png" alt="" />
       </form>
     </main>
   );
-};
+}
 
 export default page;

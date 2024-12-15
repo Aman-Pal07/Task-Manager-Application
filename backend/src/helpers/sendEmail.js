@@ -1,24 +1,34 @@
-import nodemailer from "nodemailer";
-import hbs from "nodemailer-express-handlebars";
-import { fileURLToPath } from "url";
+import nodeMailer from "nodemailer";
 import path from "path";
+import dotenv from "dotenv";
+import hbs from "nodemailer-express-handlebars";
+import { fileURLToPath } from "node:url";
 
-// Define __dirname
+dotenv.config();
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const sendEmail = async (options, type) => {
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMPT_HOST,
-    port: process.env.SMPT_PORT,
-    service: process.env.SMPT_SERVICE,
+const sendEmail = async (
+  subject,
+  send_to,
+  send_from,
+  reply_to,
+  template,
+  name,
+  link
+) => {
+  const transporter = nodeMailer.createTransport({
+    service: "Outlook365",
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false,
     auth: {
-      user: process.env.SMPT_MAIL,
-      pass: process.env.SMPT_PASSWORD,
+      user: process.env.USER_EMAIL, //Your Outlook email
+      pass: process.env.EMAIL_PASS, //Your Outlook password
     },
   });
 
-  // Set up Handlebars
   const handlebarsOptions = {
     viewEngine: {
       extName: ".handlebars",
@@ -31,35 +41,25 @@ const sendEmail = async (options, type) => {
 
   transporter.use("compile", hbs(handlebarsOptions));
 
-  let template = "";
-  let subject = "";
-
-  // Dynamically set template and subject based on email type
-  if (type === "verify") {
-    template = "emailVerification";
-    subject = "Please verify your email address";
-  } else if (type === "forgot") {
-    template = "forgotPassword";
-    subject = "Password Reset Request";
-  }
-
   const mailOptions = {
-    from: process.env.SMPT_MAIL,
-    to: options.email,
+    from: send_from,
+    to: send_to,
+    replyTo: reply_to,
     subject: subject,
-    template: template, // Use the specified template
+    template: template,
     context: {
-      name: options.name,
-      link: options.link,
+      name: name,
+      link: link,
     },
   };
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log(`Email sent to ${options.email} for ${type} action.`);
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Message sent: %s", info.messageId);
+    return info;
   } catch (error) {
-    console.error("Error sending email: ", error);
-    throw new Error("Email could not be sent");
+    console.log("Error sending email: ", error);
+    throw error;
   }
 };
 

@@ -1,6 +1,6 @@
 "use client";
-
 import { useUserContext } from "@/context/userContext";
+import React from "react";
 
 interface Props {
   params: {
@@ -8,8 +8,9 @@ interface Props {
   };
 }
 
-const page = ({ params }: Props) => {
+function page({ params }: Props) {
   const { verificationToken } = params;
+
   const { verifyUser } = useUserContext();
 
   return (
@@ -27,6 +28,6 @@ const page = ({ params }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default page;

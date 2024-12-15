@@ -1,10 +1,11 @@
 "use client";
-
 import { useUserContext } from "@/context/userContext";
 import React, { useState } from "react";
 
-const ForgotPasswordForm = () => {
+function ForgotPasswordForm() {
   const { forgotPasswordEmail } = useUserContext();
+
+  // state
   const [email, setEmail] = useState("");
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,6 +16,7 @@ const ForgotPasswordForm = () => {
     e.preventDefault();
     forgotPasswordEmail(email);
 
+    // clear input
     setEmail("");
   };
 
@@ -30,9 +32,9 @@ const ForgotPasswordForm = () => {
           </label>
           <input
             type="email"
-            name="email"
             value={email}
             onChange={handleEmailChange}
+            name="email"
             placeholder="johndoe@gmail.com"
             className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
           />
@@ -40,8 +42,8 @@ const ForgotPasswordForm = () => {
         <div className="flex">
           <button
             type="submit"
-            className="mt-[1.5rem] flex-1 px-4 py-3 font-bold bg-[#2ECC71] text-white rounded-md hover:bg-[#1abc9c] transition-colors"
             onClick={handleSubmit}
+            className="mt-[1.5rem] flex-1 px-4 py-3 font-bold bg-[#2ECC71] text-white rounded-md hover:bg-[#1abc9c] transition-colors"
           >
             Reset Password
           </button>
@@ -50,6 +52,6 @@ const ForgotPasswordForm = () => {
       <img src="/flurry.png" alt="" />
     </form>
   );
-};
+}
 
 export default ForgotPasswordForm;

@@ -21,6 +21,7 @@ import {
   deleteUser,
   getAllUsers,
 } from "../controllers/auth/adminController.js";
+
 const router = express.Router();
 
 router.post("/register", registerUser);
@@ -29,19 +30,28 @@ router.get("/logout", logoutUser);
 router.get("/user", protect, getUser);
 router.patch("/user", protect, updateUser);
 
-//admin routes
+// admin route
 router.delete("/admin/users/:id", protect, adminMiddleware, deleteUser);
+
+// get all users
 router.get("/admin/users", protect, creatorMiddleware, getAllUsers);
 
+// login status
 router.get("/login-status", userLoginStatus);
 
-// verification routes
+// email verification
 router.post("/verify-email", protect, verifyEmail);
+
+// veriify user --> email verification
 router.post("/verify-user/:verificationToken", verifyUser);
 
-//Passwords routes
+// forgot password
 router.post("/forgot-password", forgotPassword);
+
+//reset password
 router.post("/reset-password/:resetPasswordToken", resetPassword);
+
+// change password ---> user must be logged in
 router.patch("/change-password", protect, changePassword);
 
 export default router;

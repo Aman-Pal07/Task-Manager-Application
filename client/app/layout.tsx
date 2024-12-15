@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import UserProvider from "@/providers/UserProvider";
+import { Inter } from "next/font/google";
+import MiniSidebar from "./Components/MiniSidebar/MiniSidebar";
+import Header from "./Components/Header/Header";
+import MainContentLayout from "@/providers/MainContentLayout";
+import SidebarProvider from "@/providers/SidebarProvider";
+import MainLayout from "@/providers/MainLayout";
+import GTMInitialiser from "@/providers/GTMInitialiser";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const inter = Inter({
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -28,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <GTMInitialiser />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
@@ -36,11 +36,21 @@ export default function RootLayout({
           referrerPolicy="no-referrer"
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Toaster position="top-center" />
-        <UserProvider>{children}</UserProvider>
+      <body className={inter.className}>
+        <UserProvider>
+          <Toaster position="top-center" />
+
+          <div className="h-full flex overflow-hidden">
+            <MiniSidebar />
+            <div className="flex-1 flex flex-col">
+              <Header />
+              <MainContentLayout>
+                <MainLayout>{children}</MainLayout>
+                <SidebarProvider />
+              </MainContentLayout>
+            </div>
+          </div>
+        </UserProvider>
       </body>
     </html>
   );

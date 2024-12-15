@@ -1,9 +1,8 @@
 "use client";
-
 import { useUserContext } from "@/context/userContext";
-import { useState } from "react";
+import React, { useState } from "react";
 
-const ChangePasswordForm = () => {
+function ChangePasswordForm() {
   const { changePassword } = useUserContext();
 
   // state
@@ -98,8 +97,9 @@ const ChangePasswordForm = () => {
           </button>
         </div>
       </div>
+      <img src="/flurry.png" alt="" />
     </form>
   );
-};
+}
 
 export default ChangePasswordForm;
